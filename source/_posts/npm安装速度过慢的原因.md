@@ -8,7 +8,7 @@ date: 2020-01-14 18:01:50
 password:
 summary:
 tags:
-categories:
+categories: 网络
 ---
 
 如果普通的去搜索npm下载速度过慢之类的问题，无论百度或是谷歌，给出的答案都是你应该使用taobao的镜像源，然后列出了如何修改npm包源的方法。
