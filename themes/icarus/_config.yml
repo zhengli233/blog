@@ -173,7 +173,7 @@ widgets:
         position: left
         # Links to be shown in the links widget
         links:
-            猴调网: http://qztejm.coding-pages.com/
+            猴调网: https://www.houtiao.club/
     -
         # Widget name
         type: category
