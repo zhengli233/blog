@@ -27,6 +27,28 @@ thumbnail: /images/为网站添加ssl加密/http-to-https.png
 最开始，猴调网使用的是`http`，并且连域名都没有，访问是靠直接输ip的。在服务器端，nginx也只设置了默认80端口的服务器。要想使用ssl加密，就必须拥有一个证书，这个证书是受信任的机构颁发给你的。网上有很多攻略，比如[从let's encrypt获取免费的证书](https://diamondfsd.com/lets-encrytp-hand-https/)。但是，使用它的前提是，你有一个域名，不能一个裸的ip。
 那么，买个域名吧。在杭州的老马，深圳的老马和北京的老李之间，我最终选择了给深圳的老马一个坐公交车的机会。腾讯云的`.club`域名一块钱一年，跟白送差不多。另外，域名证书也能免费提供，所以直接用它的就行了。
 在下载它的证书之前，要先讲一下猴调网哪里需要用到这个证书。
-现在的猴调网的前端，不再是放在aws的服务器上了，我托管给了coding page，因为国内访问新加坡的服务器实在是又慢又不稳定。coding page上的域名可以绑定为`www.houtiao.club`以及`houtiao.club`这个主域名，让腾讯云解析到coding page原来的域名就可以了。并且，可以在coding page上直接设置为强制https访问，这是不需要证书的，因为coding自己有。此时直接打开猴调网主页，就已经可以看到是ssl加密过的了。
+现在的猴调网的前端，不再是放在aws的服务器上了，我托管给了coding page，因为国内访问新加坡的服务器实在是又慢又不稳定。coding page上的域名可以绑定为`www.houtiao.club`以及`houtiao.club`这个主域名，让腾讯云解析到coding page原来的域名就可以了。并且，可以在coding page上直接设置为强制https访问，这是不需要我提供证书的，因为coding自己有。此时直接打开猴调网主页，就已经可以看到是ssl加密过的了。
 但是，当猴调网去调用后端api时，问题来了，后端并没有做ssl加密。这种情况下会产生两种后果，一是请求后端api的子页面不再被认定为是加密的了，另一种是chrome阻止了未加密的请求。这两种情况我都遇到了，无论那种，都不是我们想要的。所以，后端的api请求也必须使用`https`。
 之前没有申请域名走`http`的时候，我将后端的api接口直接暴露在公网上，前端只需要访问公网ip和端口就行了，这个后端是使用gunicorn部署的。
+这里，我改变了之前的做法。我没有再使用暴露在公网的api接口，而是使用了Nginx的反向代理，将公网api请求转发给内网的gunicorn端口，这样就将ssl加密的工作交给了Nginx。我们只需要在Nginx的服务器配置文件中配置监听443端口(https请求的默认端口)，启用ssl加密，并指定证书的路径。
+```
+server {
+
+  listen 443 ssl;
+
+  server_name api.houtiao.club;
+
+  ssl_certificate /home/ubuntu/upload/cert/Nginx/1_api.houtiao.club_bundle.crt;
+  ssl_certificate_key /home/ubuntu/upload/cert/Nginx/2_api.houtiao.club.key;
+  ssl_session_cache shared:SSL:1m;
+  ssl_session_timeout 5m;
+  ssl_ciphers HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+
+  location / {
+    proxy_pass http://127.0.0.1:8000/;
+  }
+}
+```
+这样，后端的代码就不需要做更改，前端的请求也使用了ssl加密。
+至此，猴调网就全面启用了`https`。
