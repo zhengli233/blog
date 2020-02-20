@@ -74,11 +74,13 @@ search:
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Comment
 # Comment
 comment:
-    type: gitment
-    owner: zhengli233         # (required) GitHub user name
-    repo: blog          # (required) GitHub repository name
-    client_id: 838e962526f9ea5099da     # (required) OAuth application client id
-    client_secret: ce6f4bd7f03c995233536e556c9d6cc502b5ebe1 # (required) OAuth application client secret
+    type: valine
+    app_id: OnRDO7gRhbtbQ5ovEj1BYsX4-gzGzoHsz        # (required) LeanCloud application id
+    app_key: 69CP8k1lxR4mAVQA4MT0ifB2       # (required) LeanCloud application key
+    notify: false           # (optional) receive email notification
+    verify: false           # (optional) show verification code
+    placeholder: 发一个猴调的评论吧   # (optional) comment box placeholder text
+
 # Donation entries
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Donation/
 # donate:
