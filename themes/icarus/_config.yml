@@ -242,6 +242,6 @@ providers:
     # Name or URL of the JavaScript and/or stylesheet CDN provider
     cdn: jsdelivr
     # Name or URL of the webfont CDN provider
-    fontcdn: google
+    fontcdn: https://fonts.loli.net/css?family=Open+Sans
     # Name or URL of the webfont Icon CDN provider
-    iconcdn: fontawesome
+    iconcdn: https://fonts.loli.net/icon?family=Material+Icons
