@@ -14,7 +14,7 @@ require('../includes/helpers/site')(hexo);
 
 // Fix large blog rendering OOM
 const hooks = [
-    'after_render:html',
+    '_after_html_render',
     'after_post_render'
 ]
 const filters = [
